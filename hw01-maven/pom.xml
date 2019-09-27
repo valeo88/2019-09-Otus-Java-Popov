@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>popov-otus-java</artifactId>
         <groupId>ru.otus</groupId>
+        <artifactId>popov-otus-java</artifactId>
         <version>2019-09-SNAPSHOT</version>
     </parent>
 
