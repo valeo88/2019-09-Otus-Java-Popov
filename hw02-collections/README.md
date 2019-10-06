@@ -1,11 +1,12 @@
 # Домашнее задание №02 "DIY ArrayList"
+## Постановка
 Написать свою реализацию ArrayList на основе массива.
 class DIYArrayList<T> implements List<T>{...}
 
 Проверить, что на ней работают методы из java.util.Collections:
-* Collections.addAll(Collection<? super T> c, T... elements)
-* Collections.static <T> void copy(List<? super T> dest, List<? extends T> src)
-* Collections.static <T> void sort(List<T> list, Comparator<? super T> c)
+* addAll(Collection<? super T> c, T... elements)
+* static <T> void copy(List<? super T> dest, List<? extends T> src)
+* static <T> void sort(List<T> list, Comparator<? super T> c)
 
 1) Проверяйте на коллекциях с 20 и больше элементами.
 2) DIYArrayList должен имплементировать ТОЛЬКО ОДИН интерфейс - List.
