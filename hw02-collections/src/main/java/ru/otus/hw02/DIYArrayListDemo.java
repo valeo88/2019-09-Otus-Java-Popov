@@ -46,6 +46,7 @@ public class DIYArrayListDemo {
         List<String> listCopy = new DIYArrayList<>(Collections.nCopies(list.size(), ""));
         Collections.copy(listCopy, list);
         System.out.println("Copy of first list: " + listCopy);
+        System.out.println("Size (22 expected): " + listCopy.size());
 
 
 

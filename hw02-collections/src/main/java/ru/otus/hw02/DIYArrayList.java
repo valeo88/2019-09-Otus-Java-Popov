@@ -202,7 +202,7 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return new DIYListItr(0);
+        return new DIYListItr();
     }
 
     @Override
@@ -230,7 +230,10 @@ public class DIYArrayList<T> implements List<T> {
     /** ListIterator implementation */
     private class DIYListItr implements ListIterator<T> {
 
-        private int cursor = 0;
+        private int cursor = -1;
+
+        DIYListItr() {
+        }
 
         DIYListItr(int index) {
             cursor = index;
@@ -238,13 +241,12 @@ public class DIYArrayList<T> implements List<T> {
 
         @Override
         public boolean hasNext() {
-            return cursor < size() - 1;
+            return cursor < lastUsedIndex;
         }
 
         @Override
         public T next() {
-            int i = cursor;
-            if (i >= size())
+            if (cursor >= lastUsedIndex)
                 throw new NoSuchElementException();
             cursor++;
             return (T) arr[cursor];
@@ -257,16 +259,15 @@ public class DIYArrayList<T> implements List<T> {
 
         @Override
         public T previous() {
-            int i = cursor - 1;
-            if (i < 0)
+            if (cursor <= 0)
                 throw new NoSuchElementException();
-            cursor = i;
-            return (T) arr[i];
+            cursor--;
+            return (T) arr[cursor];
         }
 
         @Override
         public int nextIndex() {
-            return cursor >= size() - 1 ? size() : cursor + 1;
+            return cursor >= lastUsedIndex ? size() : cursor + 1;
         }
 
         @Override
