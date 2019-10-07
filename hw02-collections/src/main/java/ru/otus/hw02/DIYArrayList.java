@@ -4,15 +4,15 @@ import java.util.*;
 
 public class DIYArrayList<T> implements List<T> {
 
-    // default capacity of initial array
+    // вместимость по умолчанию для массива значений
     private static final int DEFAULT_INITIAL_CAPACITY = 10;
-    // array grow rate - because of 2 we can guarantee like constant time adding to end
+    // коэффициент роста вместимости массива (2 - чтобы была усредненная постоянная сложность вставки в конец)
     private static final int GROW_RATE = 2;
 
-    // array for storing elements
+    // массив для хранения элементов
     private Object[] arr;
-    // index of last element in array
-    private int lastUsedIndex = -1;
+    // индекс последнего элемента в массиве
+    private int lastElementIndex = -1;
 
     public DIYArrayList() {
         arr = new Object[DEFAULT_INITIAL_CAPACITY];
@@ -36,17 +36,17 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public int size() {
-        return Math.max(lastUsedIndex+1, 0);
+        return Math.max(lastElementIndex + 1, 0);
     }
 
     @Override
     public boolean isEmpty() {
-        return lastUsedIndex == -1;
+        return lastElementIndex == -1;
     }
 
     @Override
     public boolean contains(Object o) {
-        for (int i = 0; i <= lastUsedIndex; i++) {
+        for (int i = 0; i <= lastElementIndex; i++) {
             if (Objects.equals(o, arr[i])) {
                 return true;
             }
@@ -62,7 +62,7 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public Object[] toArray() {
         Object[] result = new Object[size()];
-        for (int i = 0; i <= lastUsedIndex; i++) {
+        for (int i = 0; i <= lastElementIndex; i++) {
             result[i] = arr[i];
         }
         return result;
@@ -70,10 +70,10 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        if (a.length < lastUsedIndex) {
+        if (a.length < lastElementIndex) {
             a = (T1[]) toArray();
         } else {
-            for (int i = 0; i <= lastUsedIndex; i++) {
+            for (int i = 0; i <= lastElementIndex; i++) {
                 a[i] = (T1) arr[i];
             }
         }
@@ -82,18 +82,18 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        if (lastUsedIndex >= arr.length - 1) {
-            // grow array 2 times and copy elements
+        if (lastElementIndex >= arr.length - 1) {
+            // не хватает места в массиве - создаем новый в GROW_RATE больше и копируем туда элементы
             arr = toArray(new Object[arr.length * GROW_RATE]);
         }
-        lastUsedIndex++;
-        arr[lastUsedIndex] = t;
+        lastElementIndex++;
+        arr[lastElementIndex] = t;
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -121,42 +121,42 @@ public class DIYArrayList<T> implements List<T> {
         }
         Object[] newArr;
         int newLastUsedIndex = -1;
-        if (lastUsedIndex + c.size() >= arr.length - 1) {
+        if (lastElementIndex + c.size() >= arr.length - 1) {
             newArr = new Object[arr.length * GROW_RATE];
         } else {
             newArr = new Object[arr.length];
         }
-        // copy first [0,index-1] elements
+        // добавляем [0,index-1] элементы
         for (int i = 0; i < index; i++) {
             newArr[++newLastUsedIndex] = arr[i];
         }
-        // add elements from c
+        // добавляем элементы из коллекции c
         for (T t : c) {
             newArr[++newLastUsedIndex] = t;
         }
-        // add elements [index,lastUsedIndex]
-        for (int i = index; i <= lastUsedIndex; i++) {
+        // добавляем [index,lastUsedIndex] элементы
+        for (int i = index; i <= lastElementIndex; i++) {
             newArr[++newLastUsedIndex] = arr[i];
         }
         arr = newArr;
-        lastUsedIndex = newLastUsedIndex;
+        lastElementIndex = newLastUsedIndex;
         return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void clear() {
         arr = new Object[0];
-        lastUsedIndex = -1;
+        lastElementIndex = -1;
     }
 
     @Override
@@ -177,12 +177,12 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i <= lastUsedIndex; i++) {
+        for (int i = 0; i <= lastElementIndex; i++) {
             if (Objects.equals(arr[i], o)) {
                 return i;
             }
@@ -192,7 +192,7 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = lastUsedIndex; i >= 0; i--) {
+        for (int i = lastElementIndex; i >= 0; i--) {
             if (Objects.equals(arr[i], o)) {
                 return i;
             }
@@ -212,22 +212,10 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    /** toString implemented for pretty print. */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("DIYArrayList{");
-        for (int i = 0; i <= lastUsedIndex; i++) {
-            sb.append(arr[i]);
-            sb.append(",");
-        }
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /** ListIterator implementation */
+    /** Реализация итератора ListIterator для метода {@link java.util.Collections#copy(List, List)}  */
     private class DIYListItr implements ListIterator<T> {
 
         private int cursor = -1;
@@ -241,12 +229,12 @@ public class DIYArrayList<T> implements List<T> {
 
         @Override
         public boolean hasNext() {
-            return cursor < lastUsedIndex;
+            return cursor < lastElementIndex;
         }
 
         @Override
         public T next() {
-            if (cursor >= lastUsedIndex)
+            if (cursor >= lastElementIndex)
                 throw new NoSuchElementException();
             cursor++;
             return (T) arr[cursor];
@@ -267,7 +255,7 @@ public class DIYArrayList<T> implements List<T> {
 
         @Override
         public int nextIndex() {
-            return cursor >= lastUsedIndex ? size() : cursor + 1;
+            return cursor >= lastElementIndex ? size() : cursor + 1;
         }
 
         @Override

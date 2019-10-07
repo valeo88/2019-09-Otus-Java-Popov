@@ -13,6 +13,6 @@ class DIYArrayList<T> implements List<T>{...}
 3) Если метод не имплементирован, то он должен выбрасывать исключение UnsupportedOperationException.
 
 ## Решение
-* Создан модуль hw02-collections с реализацией DIYArrayList
-* Создан класс ru.otus.hw02.DIYArrayListDemo для проверки методов из задания
-* Модуль собирается в исполняемый jar
+* Создан модуль hw02-collections, подключен JUnit
+* Создан класс ru.otus.hw02.DIYArrayList с реализацией интерфейса List<T> на основе массива
+* Создан класс теста ru.otus.hw02.DIYArrayListTest для тестирования методов из задания
