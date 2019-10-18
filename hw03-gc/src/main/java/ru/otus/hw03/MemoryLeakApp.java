@@ -15,6 +15,14 @@ import java.util.stream.Collectors;
     -Xms64m
     -Xmx64m
     -XX:+UseG1GC
+
+    -Xms64m
+    -Xmx64m
+    -XX:+UseConcMarkSweepGC
+
+    -Xms64m
+    -Xmx64m
+    -XX:+UseParallelGC
 * */
 /** Приложение с медленной утечкой памяти.*/
 public class MemoryLeakApp {
