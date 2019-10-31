@@ -22,6 +22,7 @@
         <module>hw02-collections</module>
         <module>hw03-gc</module>
         <module>hw04-autolog</module>
+        <module>hw05-testframework</module>
     </modules>
 
     <properties>
