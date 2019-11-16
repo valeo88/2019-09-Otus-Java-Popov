@@ -7,7 +7,7 @@ import java.util.List;
 /** Ячейка для банкнот одного номинала. */
 public class BanknoteCell {
     // номинал ячейки
-    private BanknoteFaceValue faceValue;
+    private final BanknoteFaceValue faceValue;
     // банкноты, хранящиеся в ячейке
     private List<Banknote> banknotes = new ArrayList<>();
 
