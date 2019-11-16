@@ -16,29 +16,29 @@ class ATMTest {
 
     private ATM atm;
     private int initialBalance;
-    private BanknoteFaceValue[] banknoteValues = {BanknoteFaceValue.TEN,
-                                                BanknoteFaceValue.TWENTY_FIVE,
-                                                BanknoteFaceValue.TEN,
-                                                BanknoteFaceValue.TWENTY_FIVE,
-                                                BanknoteFaceValue.FIFTY,
-                                                BanknoteFaceValue.ONE_HUNDRED,
-                                                BanknoteFaceValue.TWENTY_FIVE,
-                                                BanknoteFaceValue.TEN,
-                                                BanknoteFaceValue.ONE_HUNDRED,
-                                                BanknoteFaceValue.FIFTY,
-                                                BanknoteFaceValue.TEN,
-                                                BanknoteFaceValue.FIVE,
-                                                BanknoteFaceValue.TEN,
-                                                BanknoteFaceValue.FIVE};
+    private Banknote[] banknotes = {Banknote.TEN,
+                                                Banknote.TWENTY_FIVE,
+                                                Banknote.TEN,
+                                                Banknote.TWENTY_FIVE,
+                                                Banknote.FIFTY,
+                                                Banknote.ONE_HUNDRED,
+                                                Banknote.TWENTY_FIVE,
+                                                Banknote.TEN,
+                                                Banknote.ONE_HUNDRED,
+                                                Banknote.FIFTY,
+                                                Banknote.TEN,
+                                                Banknote.FIVE,
+                                                Banknote.TEN,
+                                                Banknote.FIVE};
 
     @BeforeEach
     void before() {
-        atm = new ATM();
+        atm = new ATMImpl();
 
         Collection<Banknote> banknotes = new ArrayList<>();
-        for (BanknoteFaceValue faceValue : banknoteValues) {
-            banknotes.add(new Banknote(faceValue));
-            initialBalance += faceValue.value();
+        for (Banknote banknote : this.banknotes) {
+            banknotes.add(banknote);
+            initialBalance += banknote.faceValue();
         }
         atm.load(banknotes);
     }
@@ -46,8 +46,7 @@ class ATMTest {
     @DisplayName("Загрузка банкнот")
     @Test
     void load() {
-        List<Banknote> banknotesToLoad = List.of(new Banknote(BanknoteFaceValue.FIVE),
-                new Banknote(BanknoteFaceValue.ONE_HUNDRED));
+        List<Banknote> banknotesToLoad = List.of(Banknote.FIVE, Banknote.ONE_HUNDRED);
 
         atm.load(banknotesToLoad);
 
@@ -62,8 +61,7 @@ class ATMTest {
         Collection<Banknote> b1 = atm.cashOut(amount);
 
         assertEquals(1, b1.size());
-        assertEquals(amount, (int) b1.stream().map(Banknote::faceValue)
-                .map(BanknoteFaceValue::value).reduce(Integer::sum).get());
+        assertEquals(amount, (int) b1.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @DisplayName("Выдача банкнот - максимальная корректная сумма")
@@ -73,9 +71,8 @@ class ATMTest {
 
         Collection<Banknote> b2 = atm.cashOut(amount);
 
-        assertEquals(banknoteValues.length, b2.size());
-        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue)
-                .map(BanknoteFaceValue::value).reduce(Integer::sum).get());
+        assertEquals(banknotes.length, b2.size());
+        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @DisplayName("Выдача банкнот - корректная промежуточная сумма")
@@ -86,8 +83,7 @@ class ATMTest {
         Collection<Banknote> b2 = atm.cashOut(amount);
 
         assertEquals(3, b2.size());
-        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue)
-                .map(BanknoteFaceValue::value).reduce(Integer::sum).get());
+        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @DisplayName("Выдача банкнот - отрицательная сумма")
