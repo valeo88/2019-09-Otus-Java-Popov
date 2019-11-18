@@ -6,23 +6,23 @@ import java.util.List;
 
 /** Реализация ячейки для банкнот одного номинала. */
 public class BanknoteCellImpl implements BanknoteCell {
-    // номинал ячейки
-    private final Integer faceValue;
+    // банкноты, для которых предназначена ячейка
+    private final Banknote banknote;
     // банкноты, хранящиеся в ячейке
     private List<Banknote> banknotes = new ArrayList<>();
 
-    public BanknoteCellImpl(int faceValue) {
-        this.faceValue = faceValue;
+    public BanknoteCellImpl(Banknote banknote) {
+        this.banknote = banknote;
     }
 
     @Override
     public int faceValue() {
-        return faceValue;
+        return banknote.faceValue();
     }
 
     @Override
     public void add(Banknote banknote) {
-        if (faceValue != banknote.faceValue()) throw new IllegalArgumentException("Not supported face value");
+        if (this.banknote.faceValue() != banknote.faceValue()) throw new IllegalArgumentException("Not supported face value");
         banknotes.add(banknote);
     }
 

@@ -16,27 +16,27 @@ class ATMTest {
 
     private ATM atm;
     private int initialBalance;
-    private Banknote[] banknotes = {Banknote.TEN,
-                                                Banknote.TWENTY_FIVE,
-                                                Banknote.TEN,
-                                                Banknote.TWENTY_FIVE,
-                                                Banknote.FIFTY,
-                                                Banknote.ONE_HUNDRED,
-                                                Banknote.TWENTY_FIVE,
-                                                Banknote.TEN,
-                                                Banknote.ONE_HUNDRED,
-                                                Banknote.FIFTY,
-                                                Banknote.TEN,
-                                                Banknote.FIVE,
-                                                Banknote.TEN,
-                                                Banknote.FIVE};
+    private Banknote[] banknotesForTest = {Banknote.TEN,
+                                        Banknote.TWENTY_FIVE,
+                                        Banknote.TEN,
+                                        Banknote.TWENTY_FIVE,
+                                        Banknote.FIFTY,
+                                        Banknote.ONE_HUNDRED,
+                                        Banknote.TWENTY_FIVE,
+                                        Banknote.TEN,
+                                        Banknote.ONE_HUNDRED,
+                                        Banknote.FIFTY,
+                                        Banknote.TEN,
+                                        Banknote.FIVE,
+                                        Banknote.TEN,
+                                        Banknote.FIVE};
 
     @BeforeEach
     void before() {
         atm = new ATMImpl();
 
         Collection<Banknote> banknotes = new ArrayList<>();
-        for (Banknote banknote : this.banknotes) {
+        for (Banknote banknote : this.banknotesForTest) {
             banknotes.add(banknote);
             initialBalance += banknote.faceValue();
         }
@@ -71,7 +71,7 @@ class ATMTest {
 
         Collection<Banknote> b2 = atm.cashOut(amount);
 
-        assertEquals(banknotes.length, b2.size());
+        assertEquals(banknotesForTest.length, b2.size());
         assertEquals(amount, (int) b2.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 

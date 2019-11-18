@@ -12,7 +12,7 @@ public class BanknotesStoreImpl implements BanknotesStore {
     public BanknotesStoreImpl() {
         // сразу создаем ячейки под все доступные номиналы
         for (Banknote banknote: Banknote.values()) {
-            store.put(banknote.faceValue(), new BanknoteCellImpl(banknote.faceValue()));
+            store.put(banknote.faceValue(), new BanknoteCellImpl(banknote));
         }
     }
 
