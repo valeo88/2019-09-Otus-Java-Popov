@@ -47,8 +47,17 @@ public class ATMImpl implements ATM {
         return banknotesStore.getBalance();
     }
 
+    @Override
+    public void onReset() {
+        reset();
+    }
+
+    @Override
+    public int onGetBalance() {
+        return getBalance();
+    }
+
     private void saveState() {
         snapshotService.saveState(new ATMState(banknotesStore.getState()));
     }
-
 }

@@ -50,17 +50,17 @@ public class ATMDepartmentTest {
     @Test
     void resetATMs() {
         // изменение балансов
-        int initialSum = atmDepartment.getBalance();
+        int initialSum = atmDepartment.collectBalance();
 
         atmDepartment.find(1).cashOut(5);
         atmDepartment.find(2).cashOut(10);
 
-        assertEquals(initialSum - 15, atmDepartment.getBalance());
+        assertEquals(initialSum - 15, atmDepartment.collectBalance());
 
         // cброс до начального состояния и проверка
         atmDepartment.resetATMs();
 
-        assertEquals(initialSum, atmDepartment.getBalance());
+        assertEquals(initialSum, atmDepartment.collectBalance());
     }
 
     @DisplayName("Получение баланса со всех банкоматов департамента.")
@@ -68,7 +68,7 @@ public class ATMDepartmentTest {
     void getBalance() {
         int sumFromATMs = atms.stream().map(ATM::getBalance).reduce(Integer::sum).get();
 
-        int sumFromDept = atmDepartment.getBalance();
+        int sumFromDept = atmDepartment.collectBalance();
 
         assertEquals(sumFromATMs, sumFromDept);
     }

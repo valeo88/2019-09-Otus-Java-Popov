@@ -12,5 +12,5 @@ public interface ATMDepartment {
     void resetATMs();
 
     /** Получение суммы остатков со всех АТМ департамента. */
-    int getBalance();
+    int collectBalance();
 }

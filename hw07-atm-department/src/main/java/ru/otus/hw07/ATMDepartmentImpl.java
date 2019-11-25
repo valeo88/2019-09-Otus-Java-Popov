@@ -7,12 +7,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-/** Реализация департамента АТМ, достаточная для решения задачи. */
+/** Реализация департамента АТМ. */
 public class ATMDepartmentImpl implements ATMDepartment {
     private final List<ATM> atms = new ArrayList<>();
+    private final ATMDepartmentCommandProducer commandProducer = new ATMDepartmentCommandProducer();
 
     public ATMDepartmentImpl(Collection<ATM> atms) {
         this.atms.addAll(atms);
+        this.atms.forEach(commandProducer::addListener);
     }
 
     @Override
@@ -23,18 +25,11 @@ public class ATMDepartmentImpl implements ATMDepartment {
 
     @Override
     public void resetATMs() {
-        /* можно считать что департамент выступает в роли генератора события,
-         а банкоматы являются подписчиками, поэтому это похоже на паттерн Observer.
-         */
-        atms.forEach(ATM::reset);
+        commandProducer.reset();
     }
 
     @Override
-    public int getBalance() {
-        int balance = 0;
-        for (ATM atm : atms) {
-            balance += atm.getBalance();
-        }
-        return balance;
+    public int collectBalance() {
+        return commandProducer.collectBalance();
     }
 }

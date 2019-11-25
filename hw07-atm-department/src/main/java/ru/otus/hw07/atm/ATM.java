@@ -1,9 +1,11 @@
 package ru.otus.hw07.atm;
 
+import ru.otus.hw07.ATMDepartmentCommandListener;
+
 import java.util.Collection;
 
 /** Банкомат. */
-public interface ATM extends Balance {
+public interface ATM extends Balance, ATMDepartmentCommandListener {
 
     /** Номер данного банкомата.*/
     int getNumber();
