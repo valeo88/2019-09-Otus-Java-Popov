@@ -1,5 +1,7 @@
 package ru.otus.hw07;
 
+import ru.otus.hw07.atm.ATM;
+
 /** Департамент ATM. */
 public interface ATMDepartment {
 

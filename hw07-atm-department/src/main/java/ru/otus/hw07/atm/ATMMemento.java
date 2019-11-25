@@ -1,4 +1,4 @@
-package ru.otus.hw07;
+package ru.otus.hw07.atm;
 
 /** Снимок состояния банкомата. */
 public class ATMMemento {

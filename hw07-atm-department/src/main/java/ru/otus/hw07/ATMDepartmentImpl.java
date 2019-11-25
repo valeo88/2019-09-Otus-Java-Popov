@@ -1,5 +1,7 @@
 package ru.otus.hw07;
 
+import ru.otus.hw07.atm.ATM;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

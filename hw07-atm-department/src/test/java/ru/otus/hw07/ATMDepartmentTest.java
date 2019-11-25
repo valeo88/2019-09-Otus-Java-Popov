@@ -3,8 +3,12 @@ package ru.otus.hw07;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.otus.hw07.atm.ATM;
+import ru.otus.hw07.atm.ATMImpl;
+import ru.otus.hw07.atm.Banknote;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +22,19 @@ public class ATMDepartmentTest {
     @BeforeEach
     void beforeEach() {
         atms = new ArrayList<>();
-        atms.add(new ATMImpl(1, 100));
-        atms.add(new ATMImpl(2, 76));
-        atms.add(new ATMImpl(3, 521));
-        atms.add(new ATMImpl(4, 1001));
+
+        ATM atm1 = new ATMImpl(1);
+        atm1.load(Arrays.asList(Banknote.FIVE, Banknote.ONE_HUNDRED, Banknote.TWENTY_FIVE));
+
+        ATM atm2 = new ATMImpl(2);
+        atm2.load(Arrays.asList(Banknote.FIVE_HUNDRED, Banknote.FIFTY, Banknote.TEN));
+
+        ATM atm3 = new ATMImpl(3);
+        atm3.load(Arrays.asList(Banknote.ONE_HUNDRED, Banknote.FIFTY, Banknote.TEN));
+
+        atms.add(atm1);
+        atms.add(atm2);
+        atms.add(atm3);
 
         atmDepartment = new ATMDepartmentImpl(atms);
     }
@@ -38,12 +51,11 @@ public class ATMDepartmentTest {
     void resetATMs() {
         // изменение балансов
         int initialSum = atmDepartment.getBalance();
-        int diff = 50;
 
-        atmDepartment.find(1).cashOut(diff);
-        atmDepartment.find(2).cashOut(diff);
+        atmDepartment.find(1).cashOut(5);
+        atmDepartment.find(2).cashOut(10);
 
-        assertEquals(initialSum - 2 * diff, atmDepartment.getBalance());
+        assertEquals(initialSum - 15, atmDepartment.getBalance());
 
         // cброс до начального состояния и проверка
         atmDepartment.resetATMs();
