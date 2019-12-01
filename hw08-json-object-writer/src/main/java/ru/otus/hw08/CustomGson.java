@@ -66,7 +66,12 @@ public class CustomGson {
             Field[] fields = object.getClass().getDeclaredFields();
             for (Field field : fields) {
                 String fieldName = field.getName();
-                if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
+                final int modifiers = field.getModifiers();
+
+                // статические и транзиентные поля не нужно преобразовывать
+                if (Modifier.isStatic(modifiers) || Modifier.isTransient(modifiers)) continue;
+
+                if (!Modifier.isPublic(modifiers)) field.setAccessible(true);
                 Object fieldValue = field.get(object);
                 if (fieldValue==null && !serializeNulls) continue;
                 builder.add(fieldName, create(fieldValue, serializeNulls));

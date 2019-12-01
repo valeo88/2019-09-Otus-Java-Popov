@@ -1,6 +1,9 @@
 package ru.otus.hw08.examples;
 
 public class Primitives {
+
+    private static final String aaaa = "aaaaaaaaaaaaaaaaaa";
+
     private byte b = 17;
     private short s = 8373;
     private int x = 1;
@@ -12,6 +15,8 @@ public class Primitives {
     private boolean isOk = true;
 
     private Integer nI = null;
+
+    private transient int ti = x + 12;
 
     public byte getB() {
         return b;
