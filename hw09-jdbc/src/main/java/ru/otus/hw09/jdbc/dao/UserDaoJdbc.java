@@ -15,16 +15,15 @@ public class UserDaoJdbc implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
 
     private final SessionManagerJdbc sessionManager;
-    private final DbExecutor<User> dbExecutor;
 
-    public UserDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<User> dbExecutor) {
+    public UserDaoJdbc(SessionManagerJdbc sessionManager) {
         this.sessionManager = sessionManager;
-        this.dbExecutor = dbExecutor;
     }
 
     @Override
     public Optional<User> findById(long id) {
         try {
+            DbExecutor<User> dbExecutor = getExecutor();
             return dbExecutor.load(id, User.class);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -35,6 +34,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public long saveUser(User user) {
         try {
+            DbExecutor<User> dbExecutor = getExecutor();
             if (dbExecutor.load(user.getId(), User.class).isPresent()) {
                 dbExecutor.update(user);
             } else {
@@ -50,5 +50,9 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public SessionManager getSessionManager() {
         return sessionManager;
+    }
+
+    private DbExecutor<User> getExecutor() {
+        return new DbExecutor<>(sessionManager.getCurrentSession().getConnection(), User.class);
     }
 }

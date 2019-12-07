@@ -11,7 +11,7 @@ public class UserMapper extends ORMapper {
     private final static Logger logger = LoggerFactory.getLogger(UserMapper.class);
 
     public UserMapper(DataSource dataSource) {
-        super(dataSource, "create table user(id bigint(20) NOT NULL auto_increment, name varchar(255), age int(3))");
+        super(dataSource, "create table if not exists user(id bigint(20) NOT NULL auto_increment, name varchar(255), age int(3))");
     }
 
     @Override

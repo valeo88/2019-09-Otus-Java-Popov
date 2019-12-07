@@ -34,4 +34,33 @@ public class Account {
     public void setRest(BigDecimal rest) {
         this.rest = rest;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "no=" + no +
+                ", type='" + type + '\'' +
+                ", rest=" + rest +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Account account = (Account) o;
+
+        if (no != account.no) return false;
+        if (type != null ? !type.equals(account.type) : account.type != null) return false;
+        return rest != null ? rest.equals(account.rest) : account.rest == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (no ^ (no >>> 32));
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (rest != null ? rest.hashCode() : 0);
+        return result;
+    }
 }

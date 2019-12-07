@@ -6,7 +6,7 @@ import ru.otus.hw09.api.sessionmanager.SessionManager;
 import java.util.Optional;
 
 public interface AccountDao {
-  Optional<Account> findById(long id);
+  Optional<Account> findByNo(long no);
 
   long saveAccount(Account account);
 
