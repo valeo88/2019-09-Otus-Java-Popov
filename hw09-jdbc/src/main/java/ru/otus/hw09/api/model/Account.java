@@ -7,16 +7,12 @@ import java.math.BigDecimal;
 /** Счет. */
 public class Account {
     @Id
-    private long no;
+    private long no = -1;
     private String type;
     private BigDecimal rest;
 
     public long getNo() {
         return no;
-    }
-
-    public void setNo(long no) {
-        this.no = no;
     }
 
     public String getType() {

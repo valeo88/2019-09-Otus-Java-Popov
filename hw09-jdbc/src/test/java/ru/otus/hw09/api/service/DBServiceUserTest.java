@@ -37,7 +37,6 @@ class DBServiceUserTest {
         dbServiceUser = new DbServiceUserImpl(userDao);
 
         user = new User();
-        user.setId(1);
         user.setName("Nikita");
         user.setAge(29);
     }
@@ -53,7 +52,6 @@ class DBServiceUserTest {
     @Test
     @DisplayName("Сохранение данных пользователя в БД если он существует.")
     void saveUserIfExists() {
-
         dbServiceUser.saveUser(user);
 
         user.setAge(50);
@@ -72,7 +70,7 @@ class DBServiceUserTest {
 
         assertEquals(loaded, loaded);
 
-        Optional<User> notExists = dbServiceUser.getUser(100);
+        Optional<User> notExists = dbServiceUser.getUser(new User().getId());
         assertEquals(Optional.empty(), notExists);
     }
 }

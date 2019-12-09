@@ -38,7 +38,6 @@ class DBServiceAccountTest {
         dbServiceAccount = new DbServiceAccountImpl(accountDao);
 
         account = new Account();
-        account.setNo(1);
         account.setType("First");
         account.setRest(new BigDecimal(100.1));
     }

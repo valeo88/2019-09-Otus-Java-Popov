@@ -35,10 +35,10 @@ public class UserDaoJdbc implements UserDao {
     public long saveUser(User user) {
         try {
             DbExecutor<User> dbExecutor = getExecutor();
-            if (dbExecutor.load(user.getId(), User.class).isPresent()) {
-                dbExecutor.update(user);
-            } else {
+            if (user.getId() == -1) {
                 dbExecutor.create(user);
+            } else {
+                dbExecutor.update(user);
             }
             return user.getId();
         } catch (Exception e) {

@@ -35,10 +35,10 @@ public class AccountDaoJdbc implements AccountDao {
     public long saveAccount(Account account) {
         try {
             DbExecutor<Account> dbExecutor = getExecutor();
-            if (dbExecutor.load(account.getNo(), Account.class).isPresent()) {
-                dbExecutor.update(account);
-            } else {
+            if (account.getNo() == -1) {
                 dbExecutor.create(account);
+            } else {
+                dbExecutor.update(account);
             }
             return account.getNo();
         } catch (Exception e) {

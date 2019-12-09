@@ -5,16 +5,12 @@ import ru.otus.hw09.orm.Id;
 /** Пользователь. */
 public class User {
     @Id
-    private long id;
+    private long id = -1;
     private String name;
     private int age;
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

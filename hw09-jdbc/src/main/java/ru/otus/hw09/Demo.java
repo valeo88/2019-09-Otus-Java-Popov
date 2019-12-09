@@ -36,47 +36,45 @@ public class Demo {
 
         // создание несуществующих пользователей
         User user1 = new User();
-        user1.setId(1L);
         user1.setName("Ivan");
         user1.setAge(29);
 
-        dbServiceUser.saveUser(user1);
-        dbServiceUser.getUser(user1.getId());
+        long user1Id = dbServiceUser.saveUser(user1);
+        dbServiceUser.getUser(user1Id);
 
         User user2 = new User();
-        user2.setId(2L);
         user2.setName("Nikita");
         user2.setAge(12);
 
-        dbServiceUser.saveUser(user2);
-        dbServiceUser.getUser(user2.getId());
+        long user2Id = dbServiceUser.saveUser(user2);
+        dbServiceUser.getUser(user2Id);
 
         // изменение существующего
-        user1.setName("Mika");
-        user1.setAge(50);
+        User user1Upd = dbServiceUser.getUser(user1Id).get();
+        user1Upd.setName("Mika");
+        user1Upd.setAge(50);
 
-        dbServiceUser.saveUser(user1);
-        dbServiceUser.getUser(user1.getId());
+        dbServiceUser.saveUser(user1Upd);
+        dbServiceUser.getUser(user1Upd.getId());
 
         AccountDao accountDao = new AccountDaoJdbc(sessionManager);
         DBServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
 
         // создание аккаунта
         Account account = new Account();
-        account.setNo(1);
         account.setType("First");
         account.setRest(new BigDecimal(100.1));
 
-        dbServiceAccount.saveAccount(account);
-        dbServiceAccount.getAccount(1);
+        long accNo = dbServiceAccount.saveAccount(account);
 
         // изменение существующего
-        account.setRest(new BigDecimal(252.5));
-        dbServiceAccount.saveAccount(account);
-        dbServiceAccount.getAccount(1);
+        Account acc1 = dbServiceAccount.getAccount(accNo).get();
+        acc1.setRest(new BigDecimal(252.5));
+        dbServiceAccount.saveAccount(acc1);
+        dbServiceAccount.getAccount(accNo);
 
         // получение несуществующего
-        dbServiceAccount.getAccount(20);
+        dbServiceAccount.getAccount(new Account().getNo());
 
     }
 }
