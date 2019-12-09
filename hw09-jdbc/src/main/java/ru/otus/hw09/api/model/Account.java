@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /** Счет. */
 public class Account {
     @Id
-    private long no = -1;
+    private long no;
     private String type;
     private BigDecimal rest;
 

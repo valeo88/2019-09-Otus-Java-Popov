@@ -5,7 +5,7 @@ import ru.otus.hw09.orm.Id;
 /** Пользователь. */
 public class User {
     @Id
-    private long id = -1;
+    private long id;
     private String name;
     private int age;
 

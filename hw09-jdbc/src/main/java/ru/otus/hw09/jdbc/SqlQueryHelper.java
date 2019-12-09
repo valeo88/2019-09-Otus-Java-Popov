@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReflectionHelper {
-    private final static Logger logger = LoggerFactory.getLogger(ReflectionHelper.class);
+public class SqlQueryHelper {
+    private final static Logger logger = LoggerFactory.getLogger(SqlQueryHelper.class);
 
     public static String createInsertStatementForClass(Class<?> clazz) {
         List<String> fieldsToInsert = getNonIdFieldNames(clazz);
@@ -98,5 +98,11 @@ public class ReflectionHelper {
         return getNonIdFields(clazz).stream()
                 .map(Field::getName)
                 .collect(Collectors.toList());
+    }
+
+    public static Object getIdFieldValue(Object obj) throws NoSuchFieldException, IllegalAccessException {
+        Field field = getIdField(obj.getClass());
+        if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
+        return field.get(obj);
     }
 }

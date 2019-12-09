@@ -7,6 +7,7 @@ import ru.otus.hw09.api.dao.UserDaoException;
 import ru.otus.hw09.api.model.Account;
 import ru.otus.hw09.api.sessionmanager.SessionManager;
 import ru.otus.hw09.jdbc.DbExecutor;
+import ru.otus.hw09.jdbc.DbExecutorException;
 import ru.otus.hw09.jdbc.sessionmanager.SessionManagerJdbc;
 
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class AccountDaoJdbc implements AccountDao {
         try {
             DbExecutor<Account> dbExecutor = getExecutor();
             return dbExecutor.load(no, Account.class);
-        } catch (Exception e) {
+        } catch (DbExecutorException e) {
             logger.error(e.getMessage(), e);
         }
         return Optional.empty();
@@ -35,13 +36,9 @@ public class AccountDaoJdbc implements AccountDao {
     public long saveAccount(Account account) {
         try {
             DbExecutor<Account> dbExecutor = getExecutor();
-            if (account.getNo() == -1) {
-                dbExecutor.create(account);
-            } else {
-                dbExecutor.update(account);
-            }
+            dbExecutor.createOrUpdate(account);
             return account.getNo();
-        } catch (Exception e) {
+        } catch (DbExecutorException e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
