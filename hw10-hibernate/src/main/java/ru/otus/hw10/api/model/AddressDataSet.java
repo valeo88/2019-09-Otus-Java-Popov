@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class AddressDataSet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
@@ -17,8 +17,7 @@ public class AddressDataSet {
     public AddressDataSet() {
     }
 
-    public AddressDataSet(long id, String street) {
-        this.id = id;
+    public AddressDataSet(String street) {
         this.street = street;
     }
 

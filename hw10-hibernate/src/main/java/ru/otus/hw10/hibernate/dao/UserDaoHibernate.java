@@ -37,6 +37,7 @@ public class UserDaoHibernate implements UserDao {
 
   @Override
   public long saveUser(User user) {
+    if (user==null) throw new IllegalArgumentException("User is null");
     DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
     try {
       Session hibernateSession = currentSession.getHibernateSession();

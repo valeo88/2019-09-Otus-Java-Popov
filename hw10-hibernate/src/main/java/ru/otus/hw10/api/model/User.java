@@ -5,7 +5,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Пользователь. */
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,26 +21,23 @@ public class User {
     @JoinColumn(name = "address_id")
     private AddressDataSet address;
 
-    @OneToMany(targetEntity = PhoneDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "user_id")
+    @OneToMany(targetEntity = PhoneDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private Set<PhoneDataSet> phones = new HashSet<>();
 
     public User() {
     }
 
-    public User(long id, String name) {
-        this.id = id;
+    public User(String name) {
         this.name = name;
     }
 
-    public User(long id, String name, AddressDataSet address) {
-        this.id = id;
+    public User(String name, AddressDataSet address) {
         this.name = name;
         this.address = address;
     }
 
-    public User(long id, String name, AddressDataSet address, Set<PhoneDataSet> phones) {
-        this.id = id;
+    public User(String name, AddressDataSet address, Set<PhoneDataSet> phones) {
         this.name = name;
         this.address = address;
         this.phones = phones;

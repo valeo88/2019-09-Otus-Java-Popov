@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class PhoneDataSet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
@@ -17,8 +17,7 @@ public class PhoneDataSet {
     public PhoneDataSet() {
     }
 
-    public PhoneDataSet(long id, String number) {
-        this.id = id;
+    public PhoneDataSet(String number) {
         this.number = number;
     }
 
