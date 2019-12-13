@@ -2,6 +2,7 @@ package ru.otus.hw10.api.model;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /** Пользователь. */
@@ -23,7 +24,7 @@ public class User {
 
     @OneToMany(targetEntity = PhoneDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
-    private Set<PhoneDataSet> phones;
+    private Set<PhoneDataSet> phones = new HashSet<>();
 
     public User() {
     }
@@ -70,8 +71,12 @@ public class User {
         this.address = address;
     }
 
-    public void setPhones(Set<PhoneDataSet> phones) {
-        this.phones = phones;
+    public void addPhone(PhoneDataSet phone) {
+        this.phones.add(phone);
+    }
+
+    public void removePhone(PhoneDataSet phone) {
+        this.phones.remove(phone);
     }
 
     @Override
@@ -80,6 +85,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address=" + address +
+                ", phones=" + phones +
                 '}';
     }
 }
