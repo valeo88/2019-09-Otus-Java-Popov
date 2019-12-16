@@ -34,7 +34,6 @@ class DBServiceUserImplTest {
     private UserDao userDao;
     private DBServiceUser dbServiceUser;
 
-
     @BeforeEach
     void setUp() {
         sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE,
@@ -125,7 +124,6 @@ class DBServiceUserImplTest {
         assertThat(mayBeUser.get().getAddress().getStreet()).isEqualTo(newAddress.getStreet());
         // у newAddress почему-то не устанавливается id в таком случае, хотя когда он загружается вместе с пользователем, то id установлен
         // assertThat(mayBeUser.get().getAddress()).isEqualToComparingFieldByField(newAddress);
-
     }
 
     @Test

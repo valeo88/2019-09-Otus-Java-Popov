@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.otus.hw10.api.sessionmanager.DatabaseSession;
 
-
 public class DatabaseSessionHibernate implements DatabaseSession {
   private final Session session;
   private final Transaction transaction;

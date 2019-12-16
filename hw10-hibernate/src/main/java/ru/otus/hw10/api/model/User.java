@@ -32,17 +32,6 @@ public class User {
         this.name = name;
     }
 
-    public User(String name, AddressDataSet address) {
-        this.name = name;
-        this.address = address;
-    }
-
-    public User(String name, AddressDataSet address, Set<PhoneDataSet> phones) {
-        this.name = name;
-        this.address = address;
-        this.phones = phones;
-    }
-
     public long getId() {
         return id;
     }
