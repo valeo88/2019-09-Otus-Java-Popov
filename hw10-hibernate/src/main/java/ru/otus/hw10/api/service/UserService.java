@@ -5,7 +5,7 @@ import ru.otus.hw10.api.model.User;
 
 import java.util.Optional;
 
-public interface DBServiceUser {
+public interface UserService {
 
   long saveUser(User user);
 

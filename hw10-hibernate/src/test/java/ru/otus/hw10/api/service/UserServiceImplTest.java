@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Сервис для работы с пользователями в рамках БД должен ")
-class DBServiceUserImplTest {
+class UserServiceImplTest {
     private static final String HIBERNATE_CFG_XML_FILE_RESOURCE = "hibernate-test.cfg.xml";
 
     private static final long USER_ID = 1L;
@@ -32,7 +32,7 @@ class DBServiceUserImplTest {
     private SessionFactory sessionFactory;
     private SessionManagerHibernate sessionManager;
     private UserDao userDao;
-    private DBServiceUser dbServiceUser;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +40,7 @@ class DBServiceUserImplTest {
                 User.class, AddressDataSet.class, PhoneDataSet.class);
         sessionManager = new SessionManagerHibernate(sessionFactory);
         userDao = new UserDaoHibernate(sessionManager);
-        dbServiceUser = new DbServiceUserImpl(userDao);
+        userService = new UserServiceImpl(userDao);
 
         user = new User("Иван");
         address = new AddressDataSet("Ленина");
@@ -56,29 +56,29 @@ class DBServiceUserImplTest {
     @Test
     @DisplayName(" не сохранять null пользователя.")
     void shouldNotSaveNullUser() {
-        assertThatThrownBy(() -> dbServiceUser.saveUser(null))
-                .isInstanceOf(DbServiceException.class)
+        assertThatThrownBy(() -> userService.saveUser(null))
+                .isInstanceOf(UserServiceException.class)
                 .hasCauseInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName(" корректно сохранять нового пользователя без связей с другими сущностями.")
     void shouldSaveNewUserWithoutRelations() {
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
         assertThat(id).isEqualTo(USER_ID);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(user);
     }
 
     @Test
     @DisplayName(" корректно обновлять существующего пользователя без связей с другими сущностями.")
     void shouldSaveExistedWithoutRelations() {
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         user.setName("Петя");
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(user);
     }
 
@@ -87,10 +87,10 @@ class DBServiceUserImplTest {
     void shouldSaveNewUserWithAddress() {
         user.setAddress(address);
 
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
         assertThat(id).isEqualTo(USER_ID);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getAddress()).isEqualToComparingFieldByField(address);
     }
@@ -100,11 +100,11 @@ class DBServiceUserImplTest {
     void shouldSaveUserWithUpdatedAddress() {
         user.setAddress(address);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         address.setStreet("Советская");
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getAddress()).isEqualToComparingFieldByField(address);
     }
@@ -114,12 +114,12 @@ class DBServiceUserImplTest {
     void shouldChangeAddressInExistedUser() {
         user.setAddress(address);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         AddressDataSet newAddress = new AddressDataSet("Советская");
         user.setAddress(newAddress);
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getAddress().getStreet()).isEqualTo(newAddress.getStreet());
         // у newAddress почему-то не устанавливается id в таком случае, хотя когда он загружается вместе с пользователем, то id установлен
@@ -131,11 +131,11 @@ class DBServiceUserImplTest {
     void shouldRemoveAddressFromExistedUser() {
         user.setAddress(address);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         user.setAddress(null);
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getAddress()).isNull();
     }
@@ -145,10 +145,10 @@ class DBServiceUserImplTest {
     void shouldSaveNewUserWithPhones() {
         user.addPhone(phone1);
 
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
         assertThat(id).isEqualTo(USER_ID);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         for (PhoneDataSet phone : mayBeUser.get().getPhones()) {
             assertThat(phone).isEqualToComparingFieldByField(phone1);
@@ -160,11 +160,11 @@ class DBServiceUserImplTest {
     void shouldSaveUserWithPhoneChange() {
         user.addPhone(phone1);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         phone1.setNumber("+7-111-123-87-23");
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         for (PhoneDataSet phone : mayBeUser.get().getPhones()) {
             assertThat(phone).isEqualToComparingFieldByField(phone1);
@@ -176,11 +176,11 @@ class DBServiceUserImplTest {
     void shouldSaveUserWithPhoneAdd() {
         user.addPhone(phone1);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         user.addPhone(phone2);
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getPhones().size()).isEqualTo(2);
         // при добавлении второго телефона он сохраняется в БД, но в самом объекте phone2 не меняется id
@@ -194,15 +194,15 @@ class DBServiceUserImplTest {
         user.addPhone(phone1);
         user.addPhone(phone2);
 
-        long id = dbServiceUser.saveUser(user);
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        long id = userService.saveUser(user);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getPhones().size()).isEqualTo(2);
 
         user.removePhone(phone2);
-        id = dbServiceUser.saveUser(user);
+        id = userService.saveUser(user);
 
-        mayBeUser = dbServiceUser.getUser(id);
+        mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getPhones().size()).isEqualTo(1);
         assertThat(mayBeUser.get().getPhones().stream().map(PhoneDataSet::getNumber).collect(Collectors.toSet()))
@@ -214,11 +214,11 @@ class DBServiceUserImplTest {
     void shouldSaveUserWithAllPhonesRemove() {
         user.addPhone(phone1);
 
-        dbServiceUser.saveUser(user);
+        userService.saveUser(user);
         user.removePhone(phone1);
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUser = userService.getUser(id);
         assertThat(mayBeUser).isPresent();
         assertThat(mayBeUser.get().getPhones()).isEmpty();
     }
@@ -226,13 +226,13 @@ class DBServiceUserImplTest {
     @Test
     @DisplayName(" корректно загружать пользователя по заданному id")
     void shouldLoadCorrectUserById() {
-        long id = dbServiceUser.saveUser(user);
+        long id = userService.saveUser(user);
         assertThat(id).isEqualTo(USER_ID);
 
-        Optional<User> mayBeUser = dbServiceUser.getUser(USER_ID);
+        Optional<User> mayBeUser = userService.getUser(USER_ID);
         assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(user);
 
-        assertThat(dbServiceUser.getUser(-1)).isNotPresent();
+        assertThat(userService.getUser(-1)).isNotPresent();
     }
 
 }
