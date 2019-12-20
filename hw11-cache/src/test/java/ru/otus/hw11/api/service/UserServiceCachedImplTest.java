@@ -239,4 +239,20 @@ class UserServiceCachedImplTest {
         assertThat(userService.getUser(-1)).isNotPresent();
     }
 
+    @Test
+    @DisplayName(" корректно загружать пользователя по заданному id если кэш сброшен")
+    void shouldLoadCorrectUserByIdIfCacheCleared() throws InterruptedException {
+        long id = userService.saveUser(user);
+        assertThat(id).isEqualTo(USER_ID);
+
+        System.gc();
+        Thread.sleep(500);
+
+        Optional<User> userFromCache = userCache.get(USER_ID);
+        assertThat(userFromCache.isEmpty());
+
+        Optional<User> mayBeUser = userService.getUser(USER_ID);
+        assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(user);
+    }
+
 }

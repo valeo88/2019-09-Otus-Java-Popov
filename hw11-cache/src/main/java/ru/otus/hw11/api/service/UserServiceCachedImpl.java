@@ -9,7 +9,7 @@ import ru.otus.hw11.api.model.User;
 import java.util.Optional;
 
 public class UserServiceCachedImpl implements UserService {
-    private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(UserServiceCachedImpl.class);
 
     private final UserDao userDao;
     private final UserCache cache;
@@ -38,7 +38,10 @@ public class UserServiceCachedImpl implements UserService {
     public Optional<User> getUser(long id) {
         try {
             Optional<User> cachedUser = this.cache.get(id);
-            if (cachedUser.isPresent()) return cachedUser;
+            if (cachedUser.isPresent()) {
+                logger.info("loaded user: {}", cachedUser);
+                return cachedUser;
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
