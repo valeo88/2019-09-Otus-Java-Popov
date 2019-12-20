@@ -16,7 +16,7 @@ public class UserCacheImpl implements UserCache {
     @Override
     public void add(User user) {
         this.cache.put(getKey(user.getId()), user);
-        logger.debug("User {} added to cache", user);
+        logger.debug("{} added to cache", user);
     }
 
     @Override
