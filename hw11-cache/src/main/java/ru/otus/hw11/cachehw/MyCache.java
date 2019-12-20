@@ -32,12 +32,12 @@ public class MyCache<K, V> implements HwCache<K, V> {
     }
 
     @Override
-    public void addListener(HwCacheListener listener) {
+    public void addListener(HwCacheListener<K,V> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void removeListener(HwCacheListener listener) {
+    public void removeListener(HwCacheListener<K,V> listener) {
         listeners.remove(listener);
     }
 
