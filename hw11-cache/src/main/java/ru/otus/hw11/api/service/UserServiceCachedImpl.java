@@ -36,21 +36,10 @@ public class UserServiceCachedImpl implements UserService {
 
     @Override
     public Optional<User> getUser(long id) {
-        try {
-            Optional<User> cachedUser = this.cache.get(id);
-            if (cachedUser.isPresent()) {
-                logger.info("loaded user: {}", cachedUser);
-                return cachedUser;
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-
         try (UserDao dao = this.userDao) {
-            Optional<User> userOptional = dao.findById(id);
-
-            logger.info("loaded user: {}", userOptional.orElse(null));
-            return userOptional;
+            Optional<User> mayBeUser = this.cache.get(id).or(() -> dao.findById(id));
+            logger.info("loaded user: {}", mayBeUser.orElse(null));
+            return mayBeUser;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

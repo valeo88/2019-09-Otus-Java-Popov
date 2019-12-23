@@ -11,7 +11,8 @@
 1. В пакетах `ru.otus.hw11.api`, `ru.otus.hw11.hibernate` содержится решение из ДЗ №10. Дополнительно добавлен
 интерфейс UserCache и реализация `ru.otus.hw11.api.service.UserServiceCachedImpl` с кешированием.
 2. `UserCache` реализован на основе `MyCache`. Демонстрацию работы `MyCache` можно увидеть 
-на примере `ru.otus.hw11.cachehw.HWCacheDemo`.
+на примере `ru.otus.hw11.cachehw.HWCacheDemo`. Для реализации UserCacheImpl написан тест с демонстрацией работы
+методов.
 3. Написан тест `ru.otus.hw11.api.service.UserServiceCachedImplTest` для демонстрации корректной работы
 сервиса пользователей с кешированием. Добавлен метод, показывающий корректную работу метода по загрузке
 пользователя из БД, когда кэш сброшен при GC.

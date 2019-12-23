@@ -8,4 +8,10 @@ public interface UserCache {
     void add(User user);
 
     Optional<User> get(long id);
+
+    void remove(User user);
+
+    void addListener(UserCacheListener listener);
+
+    void removeListener(UserCacheListener listener);
 }
