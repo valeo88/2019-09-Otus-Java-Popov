@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.hw11.api.cache.UserCache;
-import ru.otus.hw11.api.cache.UserCacheListener;
 import ru.otus.hw11.api.model.AddressDataSet;
 import ru.otus.hw11.api.model.User;
 
@@ -65,7 +64,7 @@ public class UserCacheImplTest {
     void shouldAddUserCacheListenerAndNotifyIt() {
         AtomicReference<User> userFromListener = new AtomicReference<>();
         AtomicReference<HwCacheAction> actionFromListener = new AtomicReference<>();
-        UserCacheListener listener = (User user, HwCacheAction action) -> {
+        HwCacheListener<String, User> listener = (String key, User user, HwCacheAction action) -> {
             userFromListener.set(user);
             actionFromListener.set(action);
         };

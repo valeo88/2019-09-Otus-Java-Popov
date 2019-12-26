@@ -1,18 +1,14 @@
 package ru.otus.hw11.cachehw;
 
 import ru.otus.hw11.api.cache.UserCache;
-import ru.otus.hw11.api.cache.UserCacheListener;
 import ru.otus.hw11.api.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /** Реализация UserCache на основе MyCache. */
 public class UserCacheImpl implements UserCache {
 
     private final HwCache<String, User> cache = new MyCache<>();
-    private final Map<UserCacheListener, HwCacheListener<String, User>> listenersMap = new HashMap<>();
 
     @Override
     public void add(User user) {
@@ -30,18 +26,13 @@ public class UserCacheImpl implements UserCache {
     }
 
     @Override
-    public void addListener(UserCacheListener listener) {
-        HwCacheListener<String, User> hwCacheListener = (String key, User value, HwCacheAction action) -> {
-            listener.notify(value, action);
-        };
-        cache.addListener(hwCacheListener);
-        listenersMap.put(listener, hwCacheListener);
+    public void addListener(HwCacheListener<String, User> listener) {
+        cache.addListener(listener);
     }
 
     @Override
-    public void removeListener(UserCacheListener listener) {
-        cache.removeListener(listenersMap.get(listener));
-        listenersMap.remove(listener);
+    public void removeListener(HwCacheListener<String, User> listener) {
+        cache.removeListener(listener);
     }
 
     private String getKey(long id) {
