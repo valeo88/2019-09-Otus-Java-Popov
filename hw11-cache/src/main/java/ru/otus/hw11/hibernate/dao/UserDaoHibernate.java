@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import ru.otus.hw11.api.dao.UserDao;
 import ru.otus.hw11.api.dao.UserDaoException;
 import ru.otus.hw11.api.model.User;
+import ru.otus.hw11.api.sessionmanager.SessionManager;
 import ru.otus.hw11.hibernate.sessionmanager.SessionManagerHibernate;
 
 import java.util.Optional;
@@ -22,11 +23,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        sessionManager.beginSession();
         try {
             return Optional.ofNullable(sessionManager.getCurrentSession().getHibernateSession().find(User.class, id));
         } catch (Exception e) {
-            sessionManager.rollbackSession();
             logger.error(e.getMessage(), e);
         }
         return Optional.empty();
@@ -35,8 +34,6 @@ public class UserDaoHibernate implements UserDao {
     @Override
     public long saveUser(User user) {
         if (user==null) throw new IllegalArgumentException("User is null");
-
-        sessionManager.beginSession();
         try {
             Session hibernateSession = sessionManager.getCurrentSession().getHibernateSession();
             if (user.getId() > 0) {
@@ -44,18 +41,15 @@ public class UserDaoHibernate implements UserDao {
             } else {
                 hibernateSession.persist(user);
             }
-            sessionManager.commitSession();
             return user.getId();
         } catch (Exception e) {
-            sessionManager.rollbackSession();
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
         }
     }
 
-
     @Override
-    public void close() throws Exception {
-        sessionManager.close();
+    public SessionManager getSessionManager() {
+        return this.sessionManager;
     }
 }
