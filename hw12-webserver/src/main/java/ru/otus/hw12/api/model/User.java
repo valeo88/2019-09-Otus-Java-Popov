@@ -17,6 +17,12 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "login", unique = true, nullable = false)
+    private String login;
+
+    @Column(name = "name", nullable = false)
+    private String password;
+
     @ManyToOne(targetEntity = AddressDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "address_id")
     private AddressDataSet address;
@@ -64,11 +70,28 @@ public class User {
         this.phones.remove(phone);
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", login='" + login + '\'' +
                 ", address=" + address +
                 ", phones=" + phones +
                 '}';
