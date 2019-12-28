@@ -20,7 +20,7 @@ public class User {
     @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne(targetEntity = AddressDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

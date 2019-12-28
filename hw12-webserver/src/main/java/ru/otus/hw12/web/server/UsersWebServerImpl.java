@@ -18,10 +18,10 @@ import ru.otus.hw12.api.service.UserService;
 import ru.otus.hw12.web.helpers.FileSystemHelper;
 import ru.otus.hw12.web.service.TemplateProcessor;
 import ru.otus.hw12.web.service.UserAuthService;
+import ru.otus.hw12.web.servlet.AdminServlet;
 import ru.otus.hw12.web.servlet.AuthorizationFilter;
 import ru.otus.hw12.web.servlet.LoginServlet;
 import ru.otus.hw12.web.servlet.UsersApiServlet;
-import ru.otus.hw12.web.servlet.UsersServlet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userService)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, userService)), "/admin");
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userService, gson)), "/api/user/*");
         return servletContextHandler;
     }
@@ -107,10 +107,10 @@ public class UsersWebServerImpl implements UsersWebServer {
         if (securityType == SecurityType.NONE){
             return servletContextHandler;
         } else if (securityType == SecurityType.FILTER_BASED) {
-            applyFilterBasedSecurity(servletContextHandler, "/users", "/api/user/*");
+            applyFilterBasedSecurity(servletContextHandler, "/admin", "/api/user/*");
             return servletContextHandler;
         } else if (securityType == SecurityType.BASIC) {
-            return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/api/user/*");
+            return createBasicAuthSecurityHandler(servletContextHandler, "/admin", "/api/user/*");
         } else {
             throw new InvalidSecurityTypeException(securityType);
         }

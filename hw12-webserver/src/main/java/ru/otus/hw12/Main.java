@@ -22,7 +22,7 @@ import static ru.otus.hw12.web.server.SecurityType.FILTER_BASED;
 public class Main {
     private static final int WEB_SERVER_PORT = 8080;
     private static final String TEMPLATES_DIR = "/templates/";
-    private static final String HIBERNATE_CFG_XML_FILE_RESOURCE = "hibernate-test.cfg.xml";
+    private static final String HIBERNATE_CFG_XML_FILE_RESOURCE = "hibernate.cfg.xml";
 
     public static void main(String[] args) throws Exception {
         // hibernate
@@ -35,8 +35,8 @@ public class Main {
         UserService userService = new UserServiceImpl(userDao);
 
         // Web services
-        UserAuthService userAuthServiceForFilterBasedSecurity = new UserAuthServiceImpl(userDao);
-        LoginService loginServiceForBasicSecurity = new InMemoryLoginServiceImpl(userDao);
+        UserAuthService userAuthServiceForFilterBasedSecurity = new UserAuthServiceImpl(userService);
+        LoginService loginServiceForBasicSecurity = new InMemoryLoginServiceImpl(userService);
 
         // Other
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();

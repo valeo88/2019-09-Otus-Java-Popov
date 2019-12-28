@@ -12,15 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class UsersServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
 
-    private static final String USERS_PAGE_TEMPLATE = "users.html";
+    private static final String USERS_PAGE_TEMPLATE = "admin.html";
     private static final String TEMPLATE_ATTR_RANDOM_USER = "randomUser";
 
     private final UserService userService;
     private final TemplateProcessor templateProcessor;
 
-    public UsersServlet(TemplateProcessor templateProcessor, UserService userService) {
+    public AdminServlet(TemplateProcessor templateProcessor, UserService userService) {
         this.templateProcessor = templateProcessor;
         this.userService = userService;
     }

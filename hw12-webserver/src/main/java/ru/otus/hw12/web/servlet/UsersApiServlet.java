@@ -12,7 +12,6 @@ import java.io.IOException;
 
 
 public class UsersApiServlet extends HttpServlet {
-
     private static final int ID_PATH_PARAM_POSITION = 1;
 
     private final UserService userService;
