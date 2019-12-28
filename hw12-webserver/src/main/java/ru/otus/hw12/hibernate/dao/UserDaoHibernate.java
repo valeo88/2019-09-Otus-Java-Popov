@@ -11,6 +11,8 @@ import ru.otus.hw12.api.model.User;
 import ru.otus.hw12.api.sessionmanager.SessionManager;
 import ru.otus.hw12.hibernate.sessionmanager.SessionManagerHibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class UserDaoHibernate implements UserDao {
@@ -20,6 +22,18 @@ public class UserDaoHibernate implements UserDao {
 
     public UserDaoHibernate(SessionManagerHibernate sessionManager) {
         this.sessionManager = sessionManager;
+    }
+
+    @Override
+    public List<User> getAll() {
+        try {
+            Session hibernateSession = sessionManager.getCurrentSession().getHibernateSession();
+            Query<User> userQuery = hibernateSession.createQuery("select e from User e", User.class);
+            return userQuery.getResultList();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return new ArrayList<>();
     }
 
     @Override

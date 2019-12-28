@@ -6,6 +6,7 @@ import ru.otus.hw12.api.dao.UserDao;
 import ru.otus.hw12.api.model.User;
 import ru.otus.hw12.api.sessionmanager.SessionManager;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
@@ -50,6 +51,28 @@ public class UserServiceImpl implements UserService {
                 logger.error(e.getMessage(), e);
             }
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<User> getUser(String login) {
+        try (SessionManager sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                return userDao.findByLogin(login);
+            } catch (Exception e) {
+                sessionManager.rollbackSession();
+                logger.error(e.getMessage(), e);
+            }
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<User> getAll() {
+        try (SessionManager sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            return userDao.getAll();
         }
     }
 
