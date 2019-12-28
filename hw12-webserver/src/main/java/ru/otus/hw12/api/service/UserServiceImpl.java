@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
             try {
                 Optional<User> userOptional = userDao.findById(id);
 
-                logger.info("loaded user: {}", userOptional.orElse(null));
+                logger.info("loaded user by id: {}", userOptional.orElse(null));
                 return userOptional;
             } catch (Exception e) {
                 sessionManager.rollbackSession();
@@ -59,7 +59,10 @@ public class UserServiceImpl implements UserService {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                return userDao.findByLogin(login);
+                Optional<User> userOptional = userDao.findByLogin(login);
+
+                logger.info("loaded user by login: {}", userOptional.orElse(null));
+                return userOptional;
             } catch (Exception e) {
                 sessionManager.rollbackSession();
                 logger.error(e.getMessage(), e);

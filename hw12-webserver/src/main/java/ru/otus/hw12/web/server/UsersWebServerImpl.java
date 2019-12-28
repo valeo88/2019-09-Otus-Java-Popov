@@ -98,7 +98,7 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, userService)), "/admin");
+        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor)), "/admin");
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userService, gson)), "/api/user/*");
         return servletContextHandler;
     }
