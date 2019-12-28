@@ -19,6 +19,7 @@ public class UsersApiServlet extends HttpServlet {
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_NAME = "name";
+    private static final String IS_ADMIN = "isAdmin";
 
     private final UserService userService;
 
@@ -31,11 +32,12 @@ public class UsersApiServlet extends HttpServlet {
         String login = request.getParameter(PARAM_LOGIN);
         String password = request.getParameter(PARAM_PASSWORD);
         String name = request.getParameter(PARAM_NAME);
-
+        Boolean isAdmin = request.getParameter(IS_ADMIN) != null && request.getParameter(IS_ADMIN).equals("true");
 
         User newUser = new User(name);
         newUser.setLogin(login);
         newUser.setPassword(password);
+        newUser.setIsAdmin(isAdmin);
 
         try {
             userService.saveUser(newUser);
@@ -65,7 +67,7 @@ public class UsersApiServlet extends HttpServlet {
 
     private long extractIdFromRequest(HttpServletRequest request) {
         String[] path = request.getPathInfo().split("/");
-        String id = (path.length > 1)? path[ID_PATH_PARAM_POSITION]: String.valueOf(- 1);
+        String id = (path.length > 1)? path[ID_PATH_PARAM_POSITION]: String.valueOf(-1);
         return Long.parseLong(id);
     }
 

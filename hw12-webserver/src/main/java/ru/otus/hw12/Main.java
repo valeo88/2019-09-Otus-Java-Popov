@@ -59,6 +59,7 @@ public class Main {
         User admin = new User("Admin");
         admin.setLogin("admin");
         admin.setPassword("123");
+        admin.setIsAdmin(true);
 
         userService.saveUser(admin);
     }
