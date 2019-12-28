@@ -18,10 +18,7 @@ import ru.otus.hw12.api.service.UserService;
 import ru.otus.hw12.web.helpers.FileSystemHelper;
 import ru.otus.hw12.web.service.TemplateProcessor;
 import ru.otus.hw12.web.service.UserAuthService;
-import ru.otus.hw12.web.servlet.AdminServlet;
-import ru.otus.hw12.web.servlet.AuthorizationFilter;
-import ru.otus.hw12.web.servlet.LoginServlet;
-import ru.otus.hw12.web.servlet.UsersApiServlet;
+import ru.otus.hw12.web.servlet.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +95,7 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        servletContextHandler.addServlet(new ServletHolder(new LogoutServlet()), "/logout");
         servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor)), "/admin");
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userService)), "/api/user/*");
         return servletContextHandler;
