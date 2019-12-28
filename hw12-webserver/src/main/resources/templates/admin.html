@@ -25,9 +25,16 @@
                     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
                   },
                   body: new URLSearchParams(new FormData(form))
-                }).then(res => loadAllUsers())
+                }).then(res => {
+                    if (res.status >= 500) {
+                        alert('Ошибка при создании пользователя');
+                        console.log(res);
+                    } else {
+                        loadAllUsers();
+                    }
+                })
                   .catch(res => {
-                    alert('Ошибка см. лог');
+                    alert('Ошибка');
                     console.log(res)
                   });
         }
