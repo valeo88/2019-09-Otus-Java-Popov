@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
     private static final int MAX_INACTIVE_INTERVAL = 30;
-    private static final String LOGIN_PAGE_TEMPLATE = "login.html";
+    private static final String PAGE_TEMPLATE = "login.html";
 
     private final TemplateProcessor templateProcessor;
     private final UserAuthService userAuthService;
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        response.getWriter().println(templateProcessor.getPage(LOGIN_PAGE_TEMPLATE, Collections.emptyMap()));
+        response.getWriter().println(templateProcessor.getPage(PAGE_TEMPLATE, Collections.emptyMap()));
     }
 
     @Override

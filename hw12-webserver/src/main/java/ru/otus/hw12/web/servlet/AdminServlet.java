@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class AdminServlet extends HttpServlet {
 
-    private static final String USERS_PAGE_TEMPLATE = "admin.html";
+    private static final String PAGE_TEMPLATE = "admin.html";
 
     private final TemplateProcessor templateProcessor;
 
@@ -23,7 +23,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        response.getWriter().println(templateProcessor.getPage(USERS_PAGE_TEMPLATE, Collections.emptyMap()));
+        response.getWriter().println(templateProcessor.getPage(PAGE_TEMPLATE, Collections.emptyMap()));
     }
 
 }
