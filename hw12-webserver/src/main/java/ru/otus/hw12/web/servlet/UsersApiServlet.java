@@ -1,11 +1,11 @@
 package ru.otus.hw12.web.servlet;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import ru.otus.hw12.api.model.User;
 import ru.otus.hw12.api.service.UserService;
+import ru.otus.hw12.api.service.UserServiceException;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -16,13 +16,35 @@ import java.io.IOException;
 
 public class UsersApiServlet extends HttpServlet {
     private static final int ID_PATH_PARAM_POSITION = 1;
+    private static final String PARAM_LOGIN = "login";
+    private static final String PARAM_PASSWORD = "password";
+    private static final String PARAM_NAME = "name";
 
     private final UserService userService;
-    private final Gson gson;
 
-    public UsersApiServlet(UserService userService, Gson gson) {
+    public UsersApiServlet(UserService userService) {
         this.userService = userService;
-        this.gson = gson;
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String login = request.getParameter(PARAM_LOGIN);
+        String password = request.getParameter(PARAM_PASSWORD);
+        String name = request.getParameter(PARAM_NAME);
+
+
+        User newUser = new User(name);
+        newUser.setLogin(login);
+        newUser.setPassword(password);
+
+        try {
+            userService.saveUser(newUser);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        } catch (UserServiceException e) {
+            response.setContentType("text/html;charset=UTF-8");
+            response.getOutputStream().print(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
