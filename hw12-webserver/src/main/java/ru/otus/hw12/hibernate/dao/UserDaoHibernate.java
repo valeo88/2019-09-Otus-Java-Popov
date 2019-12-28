@@ -50,7 +50,7 @@ public class UserDaoHibernate implements UserDao {
     public Optional<User> findByLogin(String login) {
         try {
             Session hibernateSession = sessionManager.getCurrentSession().getHibernateSession();
-            Query<User> userQuery = hibernateSession.createQuery("select e from User e where e.login = ?", User.class);
+            Query<User> userQuery = hibernateSession.createQuery("select e from User e where e.login = ?1", User.class);
             userQuery.setParameter(1, login);
             return Optional.ofNullable(userQuery.getSingleResult());
         } catch (Exception e) {

@@ -41,6 +41,7 @@ public class Main {
         // Other
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
+        createAdminUser(userService);
 
         UsersWebServer usersWebServer = new UsersWebServerImpl(WEB_SERVER_PORT,
                 FILTER_BASED,
@@ -52,6 +53,14 @@ public class Main {
 
         usersWebServer.start();
         usersWebServer.join();
+    }
+
+    private static void createAdminUser(UserService userService) {
+        User admin = new User("Admin");
+        admin.setLogin("admin");
+        admin.setPassword("123");
+
+        userService.saveUser(admin);
     }
 
 }
