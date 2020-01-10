@@ -27,6 +27,7 @@ import ru.otus.hw13.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.hw13.web.interceptor.AuthorizationInterceptor;
 import ru.otus.hw13.web.service.UserAuthService;
 import ru.otus.hw13.web.service.UserAuthServiceImpl;
+import ru.otus.hw13.web.startup.AdminUserCreator;
 
 @Configuration
 @ComponentScan
@@ -103,6 +104,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public AuthorizationInterceptor authorizationInterceptor() {
         return new AuthorizationInterceptor();
+    }
+
+    @Bean
+    public AdminUserCreator adminUserCreator() {
+        return new AdminUserCreator(userService());
     }
 
     @Override
