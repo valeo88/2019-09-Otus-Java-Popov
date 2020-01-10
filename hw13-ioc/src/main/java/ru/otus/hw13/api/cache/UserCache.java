@@ -6,6 +6,8 @@ import ru.otus.hw13.cachehw.HwCacheListener;
 import java.util.Optional;
 
 public interface UserCache {
+    String NAME = "userCache";
+
     void add(User user);
 
     Optional<User> get(long id);

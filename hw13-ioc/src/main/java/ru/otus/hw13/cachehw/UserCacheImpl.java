@@ -7,7 +7,7 @@ import ru.otus.hw13.api.model.User;
 import java.util.Optional;
 
 /** Реализация UserCache на основе MyCache. */
-@Component
+@Component(UserCache.NAME)
 public class UserCacheImpl implements UserCache {
 
     private final HwCache<String, User> cache = new MyCache<>();

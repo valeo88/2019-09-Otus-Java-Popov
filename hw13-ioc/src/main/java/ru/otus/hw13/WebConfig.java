@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -23,6 +24,7 @@ import ru.otus.hw13.cachehw.UserCacheImpl;
 import ru.otus.hw13.hibernate.HibernateUtils;
 import ru.otus.hw13.hibernate.dao.UserRepositoryHibernate;
 import ru.otus.hw13.hibernate.sessionmanager.SessionManagerHibernate;
+import ru.otus.hw13.web.interceptor.AuthorizationInterceptor;
 import ru.otus.hw13.web.service.UserAuthService;
 import ru.otus.hw13.web.service.UserAuthServiceImpl;
 
@@ -98,8 +100,18 @@ public class WebConfig implements WebMvcConfigurer {
         return new UserAuthServiceImpl(userRepository());
     }
 
+    @Bean
+    public AuthorizationInterceptor authorizationInterceptor() {
+        return new AuthorizationInterceptor();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/static/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/admin/**", "/api/**");
     }
 }

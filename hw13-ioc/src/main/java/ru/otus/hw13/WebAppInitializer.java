@@ -2,7 +2,6 @@ package ru.otus.hw13;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-import ru.otus.hw13.web.filter.AuthorizationFilter;
 
 import javax.servlet.Filter;
 
@@ -29,7 +28,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding("UTF-8");
         encodingFilter.setForceEncoding(true);
-        AuthorizationFilter authorizationFilter = new AuthorizationFilter();
-        return new Filter[]{encodingFilter, authorizationFilter};
+        return new Filter[]{encodingFilter};
     }
 }
