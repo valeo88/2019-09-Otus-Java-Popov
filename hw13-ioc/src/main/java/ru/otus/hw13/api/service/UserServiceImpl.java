@@ -2,7 +2,6 @@ package ru.otus.hw13.api.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import ru.otus.hw13.api.model.User;
 import ru.otus.hw13.api.repository.UserRepository;
 import ru.otus.hw13.api.sessionmanager.SessionManager;
@@ -10,7 +9,6 @@ import ru.otus.hw13.api.sessionmanager.SessionManager;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class UserServiceImpl implements UserService {
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 

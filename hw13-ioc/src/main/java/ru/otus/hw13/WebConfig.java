@@ -1,6 +1,5 @@
 package ru.otus.hw13;
 
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,33 +12,20 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-import ru.otus.hw13.api.cache.UserCache;
-import ru.otus.hw13.api.model.AddressDataSet;
-import ru.otus.hw13.api.model.PhoneDataSet;
 import ru.otus.hw13.api.model.User;
-import ru.otus.hw13.api.repository.UserRepository;
 import ru.otus.hw13.api.service.UserService;
-import ru.otus.hw13.api.service.UserServiceCachedImpl;
-import ru.otus.hw13.cachehw.UserCacheImpl;
-import ru.otus.hw13.hibernate.HibernateUtils;
-import ru.otus.hw13.hibernate.dao.UserRepositoryHibernate;
-import ru.otus.hw13.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.hw13.web.interceptor.AuthorizationInterceptor;
-import ru.otus.hw13.web.service.UserAuthService;
-import ru.otus.hw13.web.service.UserAuthServiceImpl;
-import ru.otus.hw13.web.startup.AdminUserCreator;
 
 @Configuration
 @ComponentScan
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    private static final String HIBERNATE_CFG_XML_FILE_RESOURCE = "/WEB-INF/config/hibernate.cfg.xml";
-
     private final ApplicationContext applicationContext;
 
     public WebConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+        createDefaultAdminUser();
     }
 
     @Bean
@@ -71,44 +57,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SessionFactory sessionFactory() {
-        return HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE,
-                User.class, AddressDataSet.class, PhoneDataSet.class);
-    }
-
-    @Bean
-    public SessionManagerHibernate sessionManager() {
-        return new SessionManagerHibernate(sessionFactory());
-    }
-
-    @Bean
-    public UserRepository userRepository() {
-        return new UserRepositoryHibernate(sessionManager());
-    }
-
-    @Bean
-    public UserCache userCache() {
-        return new UserCacheImpl();
-    }
-
-    @Bean
-    public UserService userService() {
-        return new UserServiceCachedImpl(userRepository(), userCache());
-    }
-
-    @Bean
-    public UserAuthService userAuthService() {
-        return new UserAuthServiceImpl(userRepository());
-    }
-
-    @Bean
     public AuthorizationInterceptor authorizationInterceptor() {
         return new AuthorizationInterceptor();
-    }
-
-    @Bean
-    public AdminUserCreator adminUserCreator() {
-        return new AdminUserCreator(userService());
     }
 
     @Override
@@ -119,5 +69,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/admin/**", "/api/**");
+    }
+
+    private void createDefaultAdminUser() {
+        User admin = new User("Admin");
+        admin.setLogin("admin");
+        admin.setPassword("123");
+        admin.setIsAdmin(true);
+
+        UserService userService = this.applicationContext.getBean(UserService.class);
+        userService.saveUser(admin);
     }
 }
