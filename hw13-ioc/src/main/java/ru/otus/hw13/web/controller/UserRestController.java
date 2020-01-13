@@ -1,8 +1,5 @@
 package ru.otus.hw13.web.controller;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.otus.hw13.api.model.User;
 import ru.otus.hw13.api.service.UserService;
 import ru.otus.hw13.api.service.UserServiceException;
+import ru.otus.hw13.web.dto.UserDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserRestController {
-    private static final String PARAM_LOGIN = "login";
-    private static final String PARAM_PASSWORD = "password";
-    private static final String PARAM_NAME = "name";
-    private static final String IS_ADMIN = "isAdmin";
 
     private UserService userService;
 
@@ -25,25 +22,26 @@ public class UserRestController {
     }
 
     @GetMapping("/api/user")
-    public JsonArray allUsers() {
-        return usersToJsonArray();
+    public List<UserDTO> allUsers() {
+        List<UserDTO> dtos = new ArrayList<>();
+        userService.getAll().forEach(user -> {
+            dtos.add(userToDTO(user));
+        });
+
+        return dtos;
     }
 
     @GetMapping("/api/user/{id}")
-    public JsonObject user(@PathVariable("id") String id) {
-        return userToJsonObject(userService.getUser(id).orElse(null));
+    public UserDTO user(@PathVariable("id") String id) {
+        return userToDTO(userService.getUser(id).orElse(null));
     }
 
     @PostMapping("/api/user")
-    public ResponseEntity<String> createUser(@RequestParam(PARAM_LOGIN) String login,
-                                             @RequestParam(PARAM_PASSWORD) String password,
-                                             @RequestParam(PARAM_NAME) String name,
-                                             @RequestParam(IS_ADMIN) Boolean isAdmin) {
-
-        User newUser = new User(name);
-        newUser.setLogin(login);
-        newUser.setPassword(password);
-        newUser.setIsAdmin(isAdmin);
+    public ResponseEntity<String> createUser(@RequestBody UserDTO data) {
+        User newUser = new User(data.getName());
+        newUser.setLogin(data.getLogin());
+        newUser.setPassword(data.getPassword());
+        newUser.setIsAdmin(data.getIsAdmin());
 
         try {
             userService.saveUser(newUser);
@@ -55,23 +53,16 @@ public class UserRestController {
         }
     }
 
-    private JsonObject userToJsonObject(User user) {
-        JsonObject userObject = new JsonObject();
+    private UserDTO userToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
         if (user!=null) {
-            userObject.add("id", new JsonPrimitive(user.getId()));
-            userObject.add("name", new JsonPrimitive(user.getName()));
-            userObject.add("login", new JsonPrimitive(user.getLogin()));
-            userObject.add("password", new JsonPrimitive("******"));
+            userDTO.setId(user.getId());
+            userDTO.setName(user.getName());
+            userDTO.setLogin(user.getLogin());
+            userDTO.setIsAdmin(user.getIsAdmin());
+            userDTO.setPassword("******");
         }
 
-        return userObject;
-    }
-
-    private JsonArray usersToJsonArray() {
-        JsonArray jsonArray = new JsonArray();
-        userService.getAll().forEach(user -> {
-            jsonArray.add(userToJsonObject(user));
-        });
-        return jsonArray;
+        return userDTO;
     }
 }

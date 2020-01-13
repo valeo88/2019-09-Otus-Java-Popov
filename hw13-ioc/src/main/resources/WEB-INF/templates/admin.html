@@ -22,9 +22,9 @@
             fetch('api/user/', {
                   method: 'POST',
                   headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                    'Content-Type': 'application/json;charset=utf-8'
                   },
-                  body: new URLSearchParams(new FormData(form))
+                  body: extractUserJson(form)
                 }).then(res => {
                     if (res.status >= 500) {
                         alert('Ошибка при создании пользователя');
@@ -37,6 +37,20 @@
                     alert('Ошибка');
                     console.log(res)
                   });
+        }
+
+        function extractUserJson(form) {
+            let userObj = objectFromForm(form);
+            userObj['isAdmin'] = userObj['isAdmin'] === 'on' ? true : false;
+            return JSON.stringify(userObj);
+        }
+
+        function objectFromForm(form) {
+            let object = {};
+            let formData = new FormData(form);
+            formData.forEach((value, key) => {object[key] = value});
+
+            return object;
         }
     </script>
 </head>
