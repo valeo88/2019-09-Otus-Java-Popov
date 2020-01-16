@@ -1,11 +1,23 @@
 package ru.otus.hw13.web.dto;
 
+import ru.otus.hw13.api.model.User;
+
 public class UserDTO {
     private long id;
     private String name;
     private String login;
     private String password;
     private boolean isAdmin;
+
+    public UserDTO(User user) {
+        if (user!=null) {
+            this.id = user.getId();
+            this.name = user.getName();
+            this.login = user.getLogin();
+            this.isAdmin = user.getIsAdmin();
+            this.password = "******";
+        }
+    }
 
     public long getId() {
         return id;

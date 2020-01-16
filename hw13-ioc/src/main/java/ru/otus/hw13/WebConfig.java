@@ -12,8 +12,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-import ru.otus.hw13.api.model.User;
-import ru.otus.hw13.api.service.UserService;
 import ru.otus.hw13.web.interceptor.AuthorizationInterceptor;
 
 @Configuration
@@ -25,7 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     public WebConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        createDefaultAdminUser();
     }
 
     @Bean
@@ -69,15 +66,5 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/admin/**", "/api/**");
-    }
-
-    private void createDefaultAdminUser() {
-        User admin = new User("Admin");
-        admin.setLogin("admin");
-        admin.setPassword("123");
-        admin.setIsAdmin(true);
-
-        UserService userService = this.applicationContext.getBean(UserService.class);
-        userService.saveUser(admin);
     }
 }
