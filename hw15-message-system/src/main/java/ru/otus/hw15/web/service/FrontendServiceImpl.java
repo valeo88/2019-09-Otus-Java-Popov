@@ -2,6 +2,7 @@ package ru.otus.hw15.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.otus.hw15.MessagingConfig;
 import ru.otus.hw15.messagesystem.Message;
@@ -19,13 +20,9 @@ public class FrontendServiceImpl implements FrontendService {
   private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
   private final Map<UUID, Consumer<?>> consumerMap = new ConcurrentHashMap<>();
-  private final MsClient msClient;
-  private final String backendServiceClientName;
+  private final String backendServiceClientName = MessagingConfig.BACKEND_SERVICE_CLIENT_NAME;
 
-  public FrontendServiceImpl(MsClient msClient) {
-    this.msClient = msClient;
-    this.backendServiceClientName = MessagingConfig.BACKEND_SERVICE_CLIENT_NAME;
-  }
+  private MsClient msClient;
 
   @Override
   public void getUserData(long userId, Consumer<String> dataConsumer) {
@@ -42,5 +39,10 @@ public class FrontendServiceImpl implements FrontendService {
       return Optional.empty();
     }
     return Optional.of(consumer);
+  }
+
+  @Qualifier("frontendMsClient")
+  public void setMsClient(MsClient msClient) {
+    this.msClient = msClient;
   }
 }

@@ -1,21 +1,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Админка</title>
+
+<!--   not working <script src="/webjars/sockjs-client/sockjs.min.js"></script>-->
+<!--    <script src="/webjars/stomp-websocket/stomp.min.js"></script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
     <script>
-        function loadAllUsers() {
-            fetch('api/user/')
-                .then(response => response.json())
-                .then(users => {
-                    let tableBody = usersTable.getElementsByTagName('tbody')[0];
-                    let rows = '';
-                    users.forEach((user, idx) => {
-                        rows += '<tr>' + '<td>' + user.id + '</td>'
-                         + '<td>' + user.name + '</td>'
-                          + '<td>' + user.login + '</td>'
-                          + '<td>' + user.password + '</td>' + '</tr>';
-                    });
-                    tableBody.innerHTML = rows;
+        const stompClient = Stomp.over(new SockJS('/app/websocket'));
+
+        function subscribeOnLoadAllUsers() {
+          stompClient.connect({}, (frame) => {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/allUsers', (msg) => {
+                const users = JSON.parse(msg.body);
+                console.log(users);
+                let tableBody = usersTable.getElementsByTagName('tbody')[0];
+                let rows = '';
+                users.forEach((user, idx) => {
+                    rows += '<tr>' + '<td>' + user.id + '</td>'
+                     + '<td>' + user.name + '</td>'
+                      + '<td>' + user.login + '</td>'
+                      + '<td>' + user.password + '</td>' + '</tr>';
                 });
+                tableBody.innerHTML = rows;
+            });
+          });
+        }
+
+        function sendLoadAllUsersRequest() {
+            stompClient.send("/app/getAllUsers", {}, {});
         }
 
         function createNewUser(form) {
@@ -55,7 +70,7 @@
     </script>
 </head>
 
-<body>
+<body onload="subscribeOnLoadAllUsers();">
 <a href="logout">Выйти</a>
 <br/>
 <h1>Создание нового пользователя:</h1>
@@ -85,7 +100,7 @@
 </form>
 
 <h1>Список всех пользователей:</h1>
-<button onclick="loadAllUsers()" style="margin: 0 0 10px 0;">Загрузить список пользователей</button>
+<button onclick="sendLoadAllUsersRequest()" style="margin: 0 0 10px 0;">Загрузить список пользователей</button>
 <table id="usersTable" style="width: 400px; border: solid 1px;">
     <thead>
         <tr>
