@@ -11,6 +11,9 @@ public class UserDTO implements Serializable {
     private String password;
     private boolean isAdmin;
 
+    public UserDTO() {
+    }
+
     public UserDTO(User user) {
         if (user!=null) {
             this.id = user.getId();

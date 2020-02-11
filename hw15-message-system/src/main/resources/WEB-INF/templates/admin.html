@@ -34,7 +34,9 @@
         }
 
         function createNewUser(form) {
-            fetch('api/user/', {
+            stompClient.send("/app/createUser", {}, extractUserJson(form));
+
+            /*fetch('api/user/', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -51,7 +53,7 @@
                   .catch(res => {
                     alert('Ошибка');
                     console.log(res)
-                  });
+                  });*/
         }
 
         function extractUserJson(form) {

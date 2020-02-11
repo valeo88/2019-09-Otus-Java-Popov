@@ -13,6 +13,8 @@ public interface FrontendService {
 
   void getAllUsersData(Consumer<List<UserDTO>> dataConsumer);
 
+  void createUser(UserDTO userDTO, Consumer<UserDTO> dataConsumer);
+
   <T> Optional<Consumer<T>> takeConsumer(UUID sourceMessageId, Class<T> tClass);
 }
 

@@ -42,6 +42,13 @@ public class FrontendServiceImpl implements FrontendService {
   }
 
   @Override
+  public void createUser(UserDTO userDTO, Consumer<UserDTO> dataConsumer) {
+    Message outMsg = msClient.produceMessage(backendServiceClientName, userDTO, MessageType.NEW_USER_DATA);
+    consumerMap.put(outMsg.getId(), dataConsumer);
+    msClient.sendMessage(outMsg);
+  }
+
+  @Override
   public <T> Optional<Consumer<T>> takeConsumer(UUID sourceMessageId, Class<T> tClass) {
     Consumer<T> consumer = (Consumer<T>) consumerMap.remove(sourceMessageId);
     if (consumer == null) {

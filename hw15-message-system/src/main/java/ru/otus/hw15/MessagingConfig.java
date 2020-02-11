@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import ru.otus.hw15.api.handlers.CreateUserRequestHandler;
 import ru.otus.hw15.api.handlers.GetUserDataCollectionRequestHandler;
 import ru.otus.hw15.api.handlers.GetUserDataRequestHandler;
 import ru.otus.hw15.api.service.UserService;
@@ -37,6 +38,7 @@ public class MessagingConfig {
         MsClient client = new MsClientImpl(BACKEND_SERVICE_CLIENT_NAME, messageSystem);
         client.addHandler(MessageType.USER_DATA, new GetUserDataRequestHandler(userService));
         client.addHandler(MessageType.USER_DATA_COLLECTION, new GetUserDataCollectionRequestHandler(userService));
+        client.addHandler(MessageType.NEW_USER_DATA, new CreateUserRequestHandler(userService));
         messageSystem.addClient(client);
 
         return client;

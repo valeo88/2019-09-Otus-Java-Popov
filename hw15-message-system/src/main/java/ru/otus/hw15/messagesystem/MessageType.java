@@ -1,6 +1,7 @@
 package ru.otus.hw15.messagesystem;
 
 public enum MessageType {
+  NEW_USER_DATA("NewUserData"),
   USER_DATA("UserData"),
   USER_DATA_COLLECTION("UserDataCollection");
 
