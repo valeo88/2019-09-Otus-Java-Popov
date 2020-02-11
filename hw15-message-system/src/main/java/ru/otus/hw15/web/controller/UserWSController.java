@@ -20,7 +20,7 @@ public class UserWSController {
 
     @MessageMapping("/getUser.{userId}")
     public void getUserById(@DestinationVariable long userId) {
-        frontendService.getUserData(userId, data -> this.template.convertAndSend("/topic/user." + userId, data));
+        frontendService.getUserData(userId, data -> this.template.convertAndSend("/topic/user", data));
     }
 
     @MessageMapping("/getAllUsers")
@@ -30,7 +30,7 @@ public class UserWSController {
 
     @MessageMapping("/createUser")
     public void createUser(UserDTO userDTO) {
-        frontendService.createUser(userDTO, data -> this.template.convertAndSend("/topic/user." + data.getId(), data));
+        frontendService.createUser(userDTO, data -> this.template.convertAndSend("/topic/user", data));
     }
 
 
