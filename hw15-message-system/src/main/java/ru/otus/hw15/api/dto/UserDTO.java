@@ -1,8 +1,10 @@
-package ru.otus.hw15.web.dto;
+package ru.otus.hw15.api.dto;
 
 import ru.otus.hw15.api.model.User;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
     private long id;
     private String name;
     private String login;

@@ -4,14 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.hw15.api.dto.UserDTO;
 import ru.otus.hw15.api.model.User;
 import ru.otus.hw15.api.service.UserService;
 import ru.otus.hw15.api.service.UserServiceException;
-import ru.otus.hw15.web.dto.UserDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 @RestController
 public class UserRestController {
 

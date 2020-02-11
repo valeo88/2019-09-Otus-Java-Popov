@@ -67,6 +67,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/admin/**", "/api/**");
+        registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/admin/**", "/websocket/**", "/topic/**");
     }
 }

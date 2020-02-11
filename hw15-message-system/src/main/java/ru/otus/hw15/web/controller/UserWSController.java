@@ -1,27 +1,26 @@
 package ru.otus.hw15.web.controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import ru.otus.hw15.api.service.UserService;
-import ru.otus.hw15.web.dto.UserDTO;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import ru.otus.hw15.web.service.FrontendService;
 
 @Controller
 public class UserWSController {
 
-    private final UserService userService;
+    private final FrontendService frontendService;
+    private final SimpMessagingTemplate template;
 
-    public UserWSController(UserService userService) {
-        this.userService = userService;
+    public UserWSController(FrontendService frontendService, SimpMessagingTemplate template) {
+        this.frontendService = frontendService;
+        this.template = template;
     }
 
     @MessageMapping("/getAllUsers")
-    @SendTo("/topic/allUsers")
-    public List<UserDTO> allUsers() {
-        return userService.getAll().stream().map(UserDTO::new).collect(Collectors.toList());
+    public void allUsers() {
+        frontendService.getAllUsersData(data -> {
+            this.template.convertAndSend("/topic/allUsers", data);
+        });
     }
 
 
