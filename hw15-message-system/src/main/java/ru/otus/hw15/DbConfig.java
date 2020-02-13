@@ -1,6 +1,7 @@
 package ru.otus.hw15;
 
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.hw15.api.model.AddressDataSet;
@@ -12,11 +13,10 @@ import ru.otus.hw15.web.startup.AdminUserCreator;
 
 @Configuration
 public class DbConfig {
-    private static final String HIBERNATE_CFG_XML_FILE_RESOURCE = "/WEB-INF/config/hibernate.cfg.xml";
 
     @Bean
-    public SessionFactory sessionFactory() {
-        return HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE,
+    public SessionFactory sessionFactory(@Value("${hibernateCfgFile}") String configFile) {
+        return HibernateUtils.buildSessionFactory(configFile,
                 User.class, AddressDataSet.class, PhoneDataSet.class);
     }
 

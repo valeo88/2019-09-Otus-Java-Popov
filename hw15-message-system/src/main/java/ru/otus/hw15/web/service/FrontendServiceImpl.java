@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.otus.hw15.MessagingConfig;
 import ru.otus.hw15.api.dto.UserDTO;
 import ru.otus.hw15.messagesystem.Message;
 import ru.otus.hw15.messagesystem.MessageType;
@@ -23,8 +23,9 @@ public class FrontendServiceImpl implements FrontendService {
   private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
   private final Map<UUID, Consumer<?>> consumerMap = new ConcurrentHashMap<>();
-  private final String backendServiceClientName = MessagingConfig.BACKEND_SERVICE_CLIENT_NAME;
 
+  @Value("${backendServiceClientName}")
+  private String backendServiceClientName;
   private MsClient msClient;
 
   @Override
