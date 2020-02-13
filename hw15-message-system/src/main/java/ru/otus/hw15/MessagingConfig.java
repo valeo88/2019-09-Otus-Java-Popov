@@ -1,8 +1,6 @@
 package ru.otus.hw15;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.hw15.api.handlers.CreateUserRequestHandler;
 import ru.otus.hw15.api.handlers.GetUserDataCollectionRequestHandler;
@@ -14,16 +12,9 @@ import ru.otus.hw15.web.handlers.GetUserDataResponseHandler;
 import ru.otus.hw15.web.service.FrontendService;
 
 @Configuration
-@ComponentScan
 public class MessagingConfig {
     public static final String FRONTEND_SERVICE_CLIENT_NAME = "frontendService";
     public static final String BACKEND_SERVICE_CLIENT_NAME = "backendService";
-
-    private final ApplicationContext applicationContext;
-
-    public MessagingConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
 
     @Bean(destroyMethod = "dispose")
     public MessageSystem messageSystem() {
@@ -31,8 +22,7 @@ public class MessagingConfig {
     }
 
     @Bean
-    public MsClient backendMsClient() {
-        UserService userService = applicationContext.getBean(UserService.class);
+    public MsClient backendMsClient(UserService userService) {
         MessageSystem messageSystem = messageSystem();
 
         MsClient client = new MsClientImpl(BACKEND_SERVICE_CLIENT_NAME, messageSystem);
@@ -45,8 +35,7 @@ public class MessagingConfig {
     }
 
     @Bean
-    public MsClient frontendMsClient() {
-        FrontendService frontendService = applicationContext.getBean(FrontendService.class);
+    public MsClient frontendMsClient(FrontendService frontendService) {
         MessageSystem messageSystem = messageSystem();
 
         MsClient client = new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME, messageSystem);
