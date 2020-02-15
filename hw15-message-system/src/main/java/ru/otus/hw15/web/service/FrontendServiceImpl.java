@@ -2,10 +2,10 @@ package ru.otus.hw15.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import ru.otus.hw15.api.dto.UserDTO;
 import ru.otus.hw15.messagesystem.Message;
 import ru.otus.hw15.messagesystem.MessageType;
@@ -18,15 +18,19 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-@Component
+@Service
 public class FrontendServiceImpl implements FrontendService {
   private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
   private final Map<UUID, Consumer<?>> consumerMap = new ConcurrentHashMap<>();
+  private final String backendServiceClientName;
+  private final MsClient msClient;
 
-  @Value("${backendServiceClientName}")
-  private String backendServiceClientName;
-  private MsClient msClient;
+  public FrontendServiceImpl(@Value("${backendServiceClientName}") String backendServiceClientName,
+                             @Qualifier("frontendMsClient") @Lazy MsClient msClient) {
+    this.backendServiceClientName = backendServiceClientName;
+    this.msClient = msClient;
+  }
 
   @Override
   public void getUserData(long userId, Consumer<UserDTO> dataConsumer) {
@@ -57,11 +61,5 @@ public class FrontendServiceImpl implements FrontendService {
       return Optional.empty();
     }
     return Optional.of(consumer);
-  }
-
-  @Qualifier("frontendMsClient")
-  @Autowired
-  public void setMsClient(MsClient msClient) {
-    this.msClient = msClient;
   }
 }
