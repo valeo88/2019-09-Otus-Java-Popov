@@ -48,7 +48,7 @@
         <logback.version>1.2.3</logback.version>
         <hibernate-core.version>5.4.4.Final</hibernate-core.version>
         <assertj-core.version>3.13.2</assertj-core.version>
-        <jetty.version>9.4.25.v20191220</jetty.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
         <freemarker.version>2.3.28</freemarker.version>
         <spring.version>5.2.3.RELEASE</spring.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
